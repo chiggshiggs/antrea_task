@@ -1,0 +1,30 @@
+// .github/renovate.json5
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base" // Start with Renovate's sensible defaults
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["gomod"], // Apply this rule specifically to Go modules
+      "vulnerabilityAlerts": {
+        "enabled": true, // Enable vulnerability alerts for Go modules
+        "respectLatest": false // Crucially, trigger updates even if not to the absolute latest version
+                              // as long as there's a security fix available.
+                              // This is important because a vulnerable version might not be
+                              // the direct predecessor of the *latest* version.
+      },
+      // This ensures that Renovate *only* creates PRs for Go dependencies
+      // if there's a security vulnerability.
+      // By default, Renovate would update to the latest compatible version.
+      // We override that default here for gomod.
+      "enabled": false, // Disable regular updates for Go modules by default
+      "deprofiles": [
+        "all" // This effectively disables all other update logic for gomod
+      ],
+      "automerge": true, // Optional: Automatically merge security updates
+                          // if tests pass. Use with caution/CI setup.
+      "labels": ["renovate/go-security"] // Optional: Add a specific label for these PRs
+    }
+  ]
+}
