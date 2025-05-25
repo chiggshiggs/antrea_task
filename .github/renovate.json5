@@ -2,25 +2,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base" // Start with Renovate's sensible defaults
+    "config:base"
   ],
+  // --- ADD THIS LINE ---
+  "prCreation": "not-pending", // Ensure PRs are created if there isn't one already pending
+  // ---------------------
   "packageRules": [
     {
-      "matchManagers": ["gomod"], // Apply this rule specifically to Go modules
-      // By default, disable all regular updates for Go modules.
-      // This is crucial for "vulnerability-only" updates.
-      "enabled": false,
+      "matchManagers": ["gomod"],
+      "enabled": false, // Disable regular updates for Go modules
 
-      // --- This section enables vulnerability updates ---
       "vulnerabilityAlerts": {
-        "enabled": true, // Enable vulnerability alerts for Go modules
-        "respectLatest": false // Crucially, trigger updates even if not to the absolute latest version
-                              // as long as there's a security fix available.
+        "enabled": true,
+        "respectLatest": false
       },
-      // --------------------------------------------------
 
-      "automerge": true, // Optional: Automatically merge security updates if tests pass. Use with caution/CI setup.
-      "labels": ["renovate/go-security"] // Optional: Add a specific label for these PRs
+      "automerge": true,
+      "labels": ["renovate/go-security"]
     }
   ]
 }
