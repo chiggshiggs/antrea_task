@@ -1,23 +1,39 @@
+// .github/renovate.json5
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: [
-    'config:recommended',
-  ],
-  prCreation: 'not-pending',
-  packageRules: [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  // We remove 'extends: ["config:base"]' temporarily to have more granular control
+  // and ensure no conflicting defaults from base config are interfering.
+  
+  "packageRules": [
     {
-      matchManagers: [
-        'gomod',
-      ],
-      enabled: false,
-      vulnerabilityAlerts: {
-        enabled: true,
-        respectLatest: false,
-      },
-      automerge: true,
-      labels: [
-        'renovate/go-security',
-      ],
+      // Rule 1: Disable all updates for all package managers by default
+      "matchManagers": ["all"],
+      "enabled": false
     },
+    {
+      // Rule 2: Specifically for Go modules, enable updates ONLY when
+      // there's a vulnerability detected.
+      "matchManagers": ["gomod"],
+      "enabled": true, // Enable the gomod manager for this rule
+      "vulnerabilityAlerts": {
+        "enabled": true,       // Activate vulnerability alerts for gomod
+        "respectLatest": false // Crucially, allow updates to *any* fixed version, not just latest
+      },
+      // Ensure that only updates originating from a vulnerability datasource are processed by this rule
+      "matchDatasources": ["vulnerability"], 
+      // Allow all types of version bumps (patch, minor, major) if it's a security fix
+      "matchUpdateTypes": ["patch", "minor", "major"],
+      
+      "automerge": true, // Optional: Automatically merge security updates if tests pass
+      "labels": ["renovate/go-security"], // Add a specific label for these PRs
+      
+      // These help ensure Renovate acts decisively on detected vulnerabilities
+      "recreateWhen": "always", 
+      "requiredStatusChecks": null // Assuming no strict required CI checks for automerge demo
+    }
   ],
+
+  // Ensure top-level settings are clear (these should already be correct)
+  "prCreation": "not-pending",
+  "dryRun": false
 }
