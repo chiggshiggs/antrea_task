@@ -2,39 +2,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base" // Start with Renovate's sensible defaults
+    "config:base"
   ],
-  "prCreation": "not-pending",
-  "dryRun": false,
-
-  // --- NEW: Default settings to disable all managers ---
-  "default": {
-    "enabled": false // Disable all managers and rules unless explicitly overridden
-  },
-  // -----------------------------------------------------
-
+  // --- ADD THIS LINE ---
+  "prCreation": "not-pending", // Ensure PRs are created if there isn't one already pending
+  // ---------------------
   "packageRules": [
     {
-      "matchManagers": ["gomod"], // Apply this rule specifically to Go modules
-      // This 'enabled: true' overrides the 'default: enabled: false' ONLY for gomod.
-      // But we still want only vulnerability-driven updates for gomod.
-      "enabled": true, 
+      "matchManagers": ["gomod"],
+      "enabled": false, // Disable regular updates for Go modules
 
       "vulnerabilityAlerts": {
-        "enabled": true,       // Activate vulnerability alerts for gomod
-        "respectLatest": false // Allow updates to *any* fixed version, not just latest
+        "enabled": true,
+        "respectLatest": false
       },
-      // This is crucial: only consider updates that originate from a vulnerability datasource
-      "matchDatasources": ["vulnerability"], 
-      // Allow all types of version bumps (patch, minor, major) if it's a security fix
-      "matchUpdateTypes": ["patch", "minor", "major"],
-      
-      "automerge": true, // Optional: Automatically merge security updates if tests pass
-      "labels": ["renovate/go-security"], // Add a specific label for these PRs
-      
-      // Ensure Renovate acts decisively on detected vulnerabilities
-      "recreateWhen": "always", 
-      "requiredStatusChecks": null // For automerge without specific CI checks configured yet
+
+      "automerge": true,
+      "labels": ["renovate/go-security"]
     }
   ]
 }
