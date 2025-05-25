@@ -1,25 +1,30 @@
 // .github/renovate.json5
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  // We remove 'extends: ["config:base"]' temporarily to have more granular control
-  // and ensure no conflicting defaults from base config are interfering.
-  
+  "extends": [
+    "config:base" // Start with Renovate's sensible defaults
+  ],
+  "prCreation": "not-pending",
+  "dryRun": false,
+
+  // --- NEW: Default settings to disable all managers ---
+  "default": {
+    "enabled": false // Disable all managers and rules unless explicitly overridden
+  },
+  // -----------------------------------------------------
+
   "packageRules": [
     {
-      // Rule 1: Disable all updates for all package managers by default
-      "matchManagers": ["all"],
-      "enabled": false
-    },
-    {
-      // Rule 2: Specifically for Go modules, enable updates ONLY when
-      // there's a vulnerability detected.
-      "matchManagers": ["gomod"],
-      "enabled": true, // Enable the gomod manager for this rule
+      "matchManagers": ["gomod"], // Apply this rule specifically to Go modules
+      // This 'enabled: true' overrides the 'default: enabled: false' ONLY for gomod.
+      // But we still want only vulnerability-driven updates for gomod.
+      "enabled": true, 
+
       "vulnerabilityAlerts": {
         "enabled": true,       // Activate vulnerability alerts for gomod
-        "respectLatest": false // Crucially, allow updates to *any* fixed version, not just latest
+        "respectLatest": false // Allow updates to *any* fixed version, not just latest
       },
-      // Ensure that only updates originating from a vulnerability datasource are processed by this rule
+      // This is crucial: only consider updates that originate from a vulnerability datasource
       "matchDatasources": ["vulnerability"], 
       // Allow all types of version bumps (patch, minor, major) if it's a security fix
       "matchUpdateTypes": ["patch", "minor", "major"],
@@ -27,13 +32,9 @@
       "automerge": true, // Optional: Automatically merge security updates if tests pass
       "labels": ["renovate/go-security"], // Add a specific label for these PRs
       
-      // These help ensure Renovate acts decisively on detected vulnerabilities
+      // Ensure Renovate acts decisively on detected vulnerabilities
       "recreateWhen": "always", 
-      "requiredStatusChecks": null // Assuming no strict required CI checks for automerge demo
+      "requiredStatusChecks": null // For automerge without specific CI checks configured yet
     }
-  ],
-
-  // Ensure top-level settings are clear (these should already be correct)
-  "prCreation": "not-pending",
-  "dryRun": false
+  ]
 }
