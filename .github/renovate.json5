@@ -1,34 +1,24 @@
-// .github/renovate.json5 - TEMPORARY DIAGNOSTIC CONFIG
+// .github/renovate.json5
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
   ],
-  "prCreation": "not-pending",
-  "dryRun": false,
-  "logLevel": "debug", // Keep debug for now to see details
-
-  // --- Temporarily disable the 'default' and 'vulnerabilityAlerts' for this test ---
-  "default": {
-    "enabled": true // Enable all managers by default for this test
-  },
+  // --- ADD THIS LINE ---
+  "prCreation": "not-pending", // Ensure PRs are created if there isn't one already pending
+  // ---------------------
   "packageRules": [
     {
       "matchManagers": ["gomod"],
-      "enabled": true, // Ensure gomod is enabled
+      "enabled": false, // Disable regular updates for Go modules
 
-      // Temporarily disable these specific vulnerability-only rules
-      // "vulnerabilityAlerts": {
-      //   "enabled": true,
-      //   "respectLatest": false
-      // },
-      // "matchDatasources": ["vulnerability"], 
+      "vulnerabilityAlerts": {
+        "enabled": true,
+        "respectLatest": false
+      },
 
-      "automerge": false, // Set to false to prevent accidental merges
-      "labels": ["renovate/diagnostic-test"], // Use a different label
-
-      "recreateWhen": "always"
+      "automerge": true,
+      "labels": ["renovate/go-security"]
     }
   ]
-  // --- END TEMPORARY DIAGNOSTIC CONFIG ---
 }
