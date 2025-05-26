@@ -13,7 +13,8 @@ The vulnerability resides in the **older versions** of the `golang.org/x/text` m
 
 I used `govulncheck` to confirm that my module indeed uses a vulnerable dependency.
 
-[image](https://app.capacities.io/bbe43b7b-2088-403b-ac5c-cba41f82b02b/3db0a895-ebcf-47d1-a8ce-923759e5c568)
+<img width="655" alt="Screenshot 2025-05-26 at 3 16 43 PM" src="https://github.com/user-attachments/assets/d21a7aa0-db23-4b46-8e98-f01c2cfd7134" />
+
 
 
 ## Solution using Renovate
