@@ -1,5 +1,5 @@
 # antrea_task
-This repo is the test task for Antrea project - Automate Dependency updates with Renovate
+This repo is the test task for Antrea project - Automate Dependency updates with Renovate (#7155)
 
 ### What the Go Program Does
 
