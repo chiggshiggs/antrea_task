@@ -1,0 +1,24 @@
+
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+
+  "prCreation": "not-pending", // Ensure PRs are created if there isn't one already pending
+  // ---------------------
+  "packageRules": [
+    {
+      "matchManagers": ["gomod"],
+      "enabled": false, // Disable regular updates for Go modules
+
+      "vulnerabilityAlerts": {
+        "enabled": true,
+        "respectLatest": false
+      },
+
+      "automerge": true,
+      "labels": ["renovate/go-security"]
+    }
+  ]
+}
