@@ -1,24 +1,18 @@
-// .github/renovate.json5
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
-  // --- ADD THIS LINE ---
-  "prCreation": "not-pending", // Ensure PRs are created if there isn't one already pending
-  // ---------------------
-  "packageRules": [
-    {
-      "matchManagers": ["gomod"],
-      "enabled": false, // Disable regular updates for Go modules
-
-      "vulnerabilityAlerts": {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:base"],
+    "enabled": true,
+    "enabledManagers": ["gomod"],
+    "packageRules": [
+      {
+        "matchManagers": ["gomod"],
+        "matchPackagePatterns": [".*"],
+        "matchUpdateTypes": ["major", "minor", "patch"],
+        "vulnerabilityAlertsOnly": true,
         "enabled": true,
-        "respectLatest": false
-      },
-
-      "automerge": true,
-      "labels": ["renovate/go-security"]
-    }
-  ]
+        "prCreation": "immediate"
+      }
+    ],
+    "labels": ["dependencies", "security"],
+    "commitMessagePrefix": "fix(deps): "
 }
